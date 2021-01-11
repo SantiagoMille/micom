@@ -134,7 +134,7 @@ class Community(cobra.Model):
             solver = [
                 s
                 for s in ["cplex", "osqp", "gurobi", "glpk"]
-                if s in cobra.util.solver.solvers
+                if s in cobra.util.solver.solvers or s in cobra.util.solver.qp_solvers
             ][0]
         logger.info("using the %s solver." % solver)
         if solver == "glpk":
