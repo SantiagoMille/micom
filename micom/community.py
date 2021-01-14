@@ -133,7 +133,7 @@ class Community(cobra.Model):
         if not solver:
             solver = [
                 s
-                for s in [ "gurobi", "cplex", "osqp", "glpk"]
+                for s in ["cplex", "osqp", "gurobi", "glpk"]
                 if s in cobra.util.solver.solvers or s in cobra.util.solver.qp_solvers
             ][0]
         logger.info("using the %s solver." % solver)
@@ -150,7 +150,6 @@ class Community(cobra.Model):
         self._modification = None
         self.mass = mass
         self.__db_metrics = None
-
         adjust_solver_config(self.solver)
         taxonomy = taxonomy.copy()
         if "abundance" not in taxonomy.columns:
