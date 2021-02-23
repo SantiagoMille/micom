@@ -242,6 +242,9 @@ class Community(cobra.Model):
             suffix = "__" + idx.replace(" ", "_").strip()
             logger.info("converting IDs for {}".format(idx))
             external = cobra.medium.find_external_compartment(model)
+            #print('\n\n\n')
+            #print(model.medium) <<-------------------------------------------------------------------------------------------------- Remove this
+            #print('')
             logger.info(
                 "Identified %s as the external compartment for %s. "
                 "If that is wrong you may be in trouble..." % (external, idx)
@@ -260,6 +263,7 @@ class Community(cobra.Model):
                 m.id = m.global_id + suffix
                 m.compartment += suffix
                 m.community_id = idx
+            
             logger.info("adding reactions for {} to community".format(idx))
             self.add_reactions(model.reactions)
             o = self.solver.interface.Objective.clone(
@@ -274,7 +278,7 @@ class Community(cobra.Model):
             self.__add_exchanges(
                 model.reactions,
                 row,
-                external_compartment=external,
+                external_compartment='b',  ##<<--------------------------------------------------------------------------------------Change this ('b') to external
                 internal_exchange=max_exchange,
             )
             self.solver.update()  # to avoid dangling refs due to lazy add
@@ -293,7 +297,10 @@ class Community(cobra.Model):
             ex = external_compartment + "__" + r.community_id
             if not cobra.medium.is_boundary_type(r, "exchange", ex):
                 continue
+            #print(ex,r,r.id,r.compartments) <<---------------------------------------------------------------------------------------Remove this
+            #print('exchange reaction')
             if not r.id.lower().startswith("ex"):
+                print('exchange but does not start with EX_')
                 logger.warning(
                     "Reaction %s seems to be an exchange " % r.id
                     + "reaction but its ID does not start with 'EX_'..."
@@ -328,6 +335,7 @@ class Community(cobra.Model):
                 met.global_id,
             )
             medium_id += "_m"
+            #print(medium_id,'medium_id') <<------------------------------------------------------------------------------Reomve this
             if medium_id == met.id:
                 medium_id += "_medium"
             if medium_id not in self.metabolites:
